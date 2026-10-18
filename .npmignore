@@ -1,0 +1,21 @@
+# npm 打包补充排除规则。
+#
+# 注意：package.json 的 "files" 是**白名单**，只放行 dist / cordis.patch.yml /
+# README.md / LICENSE。本文件是第二道保险，防止将来往 files 里加通配符时
+# 误带源码、测试、历史归档或打包产物。
+*.ts
+!dist/**
+src/
+packages/
+scripts/
+types/
+dist/**/*.map
+*.tgz
+*.bak-*
+*.log
+tsconfig.json
+tsdown.config.ts
+vitest.config.ts
+cordis.yml
+.research/
+node_modules/

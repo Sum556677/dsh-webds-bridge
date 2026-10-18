@@ -1,0 +1,17 @@
+# dsh-webds-bridge 的组合包 patch 层。
+#
+# 单包同时提供 Host 与 Client 两端，因此这里一次性插入两条 loader 条目：
+#   - dsh-webds-bridge       Host 半区（走 package.json 的 main → dist/index.js）
+#   - dsh-webds-bridge-client Client 半区（走 exports["./client"] → dist/client.cjs）
+#
+# 两条条目的 `name` 都是**包名** `dsh-webds-bridge`：
+#   - Host 条目由 Loader 按包名解析 main；
+#   - Client 条目必须存在，dsh-client-modules 才会扫描到该包的 dsh.client 声明，
+#     按 exports["./client"] 取浏览器 bundle 编入 window.__DSH_BOOT__。
+#
+# 注意：不能用 file:// 绝对路径，否则客户端 bundle 不会被编入启动图。
+- insert:
+    - id: dsh-webds-bridge
+      name: dsh-webds-bridge
+    - id: dsh-webds-bridge-client
+      name: dsh-webds-bridge

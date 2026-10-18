@@ -1,0 +1,34 @@
+{
+  "name": "dsh-webds-bridge-client",
+  "version": "0.1.0",
+  "description": "DSH × 网页版 DeepSeek 对话桥接",
+  "type": "module",
+  "main": "./dist/host.js",
+  "exports": {
+    ".": "./dist/host.js",
+    "./client": "./dist/index.cjs",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "clean": "rm -rf dist"
+  },
+  "keywords": [
+    "dsh-plugin",
+    "deepseek-harness",
+    "cordis",
+    "dsh-client"
+  ],
+  "author": "dsh-webds-bridge",
+  "license": "MIT",
+  "dsh": {
+    "client": {
+      "platform": "web"
+    }
+  },
+  "peerDependencies": {},
+  "dependencies": {}
+}

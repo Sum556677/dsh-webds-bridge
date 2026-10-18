@@ -1,0 +1,65 @@
+{
+  "name": "dsh-webds-bridge",
+  "version": "0.1.1",
+  "description": "DSH × 网页版 DeepSeek 对话桥接：纯 DOM 自动化收发、多对话记忆归档与注入、设置页面板与快捷操作栏（Host + Client 单包）",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./client": {
+      "default": "./dist/client.cjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "cordis.patch.yml",
+    "README.md",
+    "LICENSE"
+  ],
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "deepseek-harness",
+    "deepseek",
+    "cordis",
+    "webview"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web"
+    }
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "*"
+  },
+  "peerDependenciesMeta": {
+    "@deepseek-ai/cordis": {
+      "optional": true
+    }
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "jsdom": "^30.0.1",
+    "tsdown": "^0.11.0",
+    "typescript": "^5.7.0",
+    "vitest": "^3.2.0"
+  },
+  "scripts": {
+    "build": "tsdown && node scripts/wrap-client-bundle.mjs",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "pack:check": "npm pack --dry-run"
+  }
+}
