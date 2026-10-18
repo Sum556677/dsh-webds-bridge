@@ -1,7 +1,7 @@
 {
   "name": "dsh-webds-bridge",
-  "version": "0.1.1",
-  "description": "DSH × 网页版 DeepSeek 对话桥接：纯 DOM 自动化收发、多对话记忆归档与注入、设置页面板与快捷操作栏（Host + Client 单包）",
+  "version": "0.1.2",
+  "description": "DSH 插件：把网页版 DeepSeek 以纯 DOM 自动化接入 DSH，无需 API Key。支持多对话记忆隔离、自动续接、设置页面板与快捷操作栏（Host + Client 单包）。",
   "license": "MIT",
   "type": "module",
   "main": "./dist/index.js",
@@ -28,7 +28,11 @@
     "deepseek-harness",
     "deepseek",
     "cordis",
-    "webview"
+    "webview",
+    "dom-automation",
+    "browser-automation",
+    "deepseek-web",
+    "chatbot-bridge"
   ],
   "dsh": {
     "bundle": {

@@ -1,31 +1,65 @@
 # DSH 网页版桥接（dsh-webds-bridge）
 
-> 把网页版 DeepSeek 的对话能力接进 DSH：侧栏拉起网页版、纯 DOM 自动化收发消息、把讨论进度按别名归档为独立记忆文件，再作为用户消息注入主会话交给本地模型执行。
+**把网页版 DeepSeek 接进 DSH —— 纯 DOM 自动化，无需 API Key。**
 
 [![npm](https://img.shields.io/npm/v/dsh-webds-bridge.svg)](https://www.npmjs.com/package/dsh-webds-bridge)
+[![license](https://img.shields.io/npm/l/dsh-webds-bridge.svg)](LICENSE)
+[![DSH](https://img.shields.io/badge/DSH-0.2.1--rc.2%2B-blue)]()
 
-当前版本：`dsh-webds-bridge@0.1.1`（单包，Host + Client 一次安装）
+## 一键安装
+
+```bash
+dsh plugin --profile desktop add dsh-webds-bridge
+```
+
+装完**从托盘彻底重启 DSH**（`Ctrl+Shift+R` 无效），设置里会出现「DSH 网页版桥接」面板。
+
+> 🔑 **无需 API Key**：走的是侧栏内置浏览器的真实网页会话，不消耗 API 额度。
+> 🌐 仅需在网页版手动登录一次（每次重启后需重登，原因见[下文](#登录态为何无法持久化调研结论不可行)）。
+
+<!-- TODO: 建议补一段 5~10 秒的使用演示 GIF，放在 docs/assets/demo.gif -->
+> _（演示 GIF 待补充：打开网页版 → 讨论 → 点「存记忆」→ 点「执行」→ 主会话开始动手）_
+
+**它能做什么**
+
+| | |
+|---|---|
+| 🧠 **免费大脑** | 用网页版 DeepSeek 做长文本讨论，省 API 的钱 |
+| 🖐 **本地双手** | 把讨论进度注入主会话，让 DSH 模型带着上下文调工具干活 |
+| 🗂 **多对话隔离** | 每个话题一个记忆别名，切换会话不再互相覆盖 |
+| 🔁 **自动续接** | token 达阈值自动总结 → 开新对话 → 接力继续 |
+| 🎛 **图形化操作** | 设置页面板 + 会话标题栏快捷按钮，不用记命令 |
+
+---
+
+## 简介
+
+> 把网页版 DeepSeek 的对话能力接进 DSH：侧栏拉起网页版、纯 DOM 自动化收发消息、把讨论进度按别名归档为独立记忆文件，再作为用户消息注入主会话交给本地模型执行。
+
+当前版本：`dsh-webds-bridge@0.1.2`（单包，Host + Client 一次安装）
 
 支持的 DSH 版本：**0.2.1-rc.2 及以上**（用 0.2.1-rc.2 实测通过；0.2.0 未验证）
 
 ---
 
-## 安装
+## 安装说明
 
-一条命令同时装好 Host 与 Client 两端：
+`dsh plugin add` 会同时装好 Host 与 Client 两端，**无需手改 `cordis.patch.yml`**：本包自带组合包 patch，会自动插入两条 loader 条目，并把包名加入 `dsh.profile.bundles`。
+
+**前置条件**
+
+- DSH Desktop **0.2.1-rc.2 及以上**
+- 执行前**完全退出 DSH**（托盘右键退出），否则会报 `EPERM: rename package.json`
+
+**指定其它 profile**
+
+把 `--profile desktop` 换成你的 profile 名即可：
 
 ```bash
 dsh plugin --profile <你的profile> add dsh-webds-bridge
 ```
 
-> 桌面版 profile 名为 `desktop`，需在 DSH 完全退出后执行：
-> ```bash
-> dsh plugin --profile desktop add dsh-webds-bridge
-> ```
-
-安装后**无需手改 `cordis.patch.yml`**：本包自带组合包 patch，会自动插入 Host 与 Client 两条 loader 条目，并把包名加入 `dsh.profile.bundles`。
-
-装完**从托盘彻底重启 DSH**（`Ctrl+Shift+R` 无效）。推送新版后升级：
+**升级到最新版**
 
 ```bash
 dsh plugin --profile desktop add dsh-webds-bridge@latest
@@ -33,10 +67,10 @@ dsh plugin --profile desktop add dsh-webds-bridge@latest
 
 ### 安装后自检
 
-设置界面左侧应出现「**DSH 网页版桥接**」，会话标题行右侧出现 `存记忆 | 执行 | 续接` 三个按钮。
+设置界面左侧应出现「**DSH 网页版桥接**」，会话标题栏右侧出现 `存记忆 | 执行 | 续接` 三个按钮。
 若没有，按顺序排查：
 
-1. 是否已彻底重启 DSH；
+1. 是否已从托盘彻底重启 DSH（`Ctrl+Shift+R` 无效）；
 2. `dsh plugin --profile desktop why dsh-webds-bridge` 确认已安装；
 3. profile 的 `package.json` 里 `dsh.profile.bundles` 是否含 `dsh-webds-bridge`。
 
