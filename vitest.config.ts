@@ -1,17 +1,25 @@
 import { defineConfig } from 'vitest/config'
 
+/**
+ * 单包结构下的测试配置。
+ *
+ * 注意 types/ 目录**不可删除**：它是 @deepseek-ai/* 的本地类型垫片，
+ * tsconfig 的 paths 与下面的 alias 都依赖它，否则类型检查与测试都会失败。
+ */
 export default defineConfig({
   test: {
-    include: ['packages/*/src/**/*.test.ts', 'packages/*/__tests__/**/*.test.ts'],
+    include: ['src/**/*.test.ts', 'src/**/__tests__/**/*.test.ts'],
     globals: true,
     coverage: {
       provider: 'v8',
-      include: ['packages/*/src/**/*.ts'],
+      include: ['src/**/*.ts'],
       exclude: ['**/*.test.ts', '**/node_modules/**'],
     },
     environmentMatchGlob: [
-      ['packages/dsh-client/**', 'jsdom'],
-      ['packages/dsh-host/**', 'node'],
+      ['src/client/**', 'jsdom'],
+      ['src/client-entry.ts', 'jsdom'],
+      ['src/host/**', 'node'],
+      ['src/index.ts', 'node'],
     ],
   },
   resolve: {

@@ -189,18 +189,24 @@ dsh-webds-bridge/
 │       ├── memory-sync.ts         # 总结 Prompt、截断、RPC 调用、当前别名
 │       ├── token-estimator.ts     # token 估算
 │       └── ui/                    # SettingsPanel / HeaderToolbar / react 类型垫片
+├── types/
+│   └── deepseek-ai.d.ts       # @deepseek-ai/* 的本地类型垫片（不可删除，见下）
 ├── dist/                      # 构建产物（发布内容）
 │   ├── index.js                   # Host 插件（ESM）
 │   └── client.cjs                 # 浏览器 bundle（CJS，自注册）
 ├── cordis.patch.yml           # 组合包 patch：同时插入 host + client 两条 loader
 ├── scripts/wrap-client-bundle.mjs
+├── tsconfig.json
 ├── tsdown.config.ts
 ├── LICENSE
 ├── README.md
 └── package.json
 ```
 
-> `packages/` 目录是旧的 monorepo 双包结构，已**不参与构建与发布**，仅作历史参考，可安全删除。
+> **`types/` 不能删。** 它不是脚手架残留：`tsconfig.json` 的 `paths` 与 `vitest.config.ts`
+> 的 alias 都把 `@deepseek-ai/*` 映射到 `types/deepseek-ai.d.ts`。删除后 `tsc` 会直接报
+> 多处 `TS2307: Cannot find module '@deepseek-ai/...'`，构建与测试都无法进行。
+> 它只在开发/类型检查时使用，**不会被打进 npm 包**（`files` 白名单不含 `types`）。
 
 ### 关键字段
 
@@ -239,13 +245,14 @@ dsh-webds-bridge/
 发布用的是单包结构，本地开发调试走软链接即可。
 
 ```bash
-# 1) 构建（新版 DSH 已移除 pnpm，直接调用本地 tsdown）
-cd C:\Users\MYJ\dsh-dev\dsh-webds-bridge
-node node_modules\tsdown\dist\run.js
-node scripts\wrap-client-bundle.mjs
+# 1) 进入项目目录并构建（新版 DSH 已移除 pnpm，直接调用本地 tsdown）
+cd <你的项目目录>
+node node_modules/tsdown/dist/run.js
+node scripts/wrap-client-bundle.mjs
 
 # 2) 链接进 profile（先把 DSH 完全退出）
-dsh plugin --profile desktop add "C:\Users\MYJ\dsh-dev\dsh-webds-bridge"
+#    路径写成本机项目目录的绝对路径；Windows 下注意反斜杠转义
+dsh plugin --profile desktop add "<你的项目目录>"
 
 # 3) 确认 profile 的 dsh.profile.bundles 含 dsh-webds-bridge，且自动挂载两端
 ```

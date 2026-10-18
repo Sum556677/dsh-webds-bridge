@@ -1,4 +1,7 @@
+# 单包结构：workspace 只含根目录。
+# allowBuilds 保留 esbuild 授权（tsdown 依赖它在安装时执行构建脚本），
+# 删掉会导致依赖安装后无法正常构建。
 packages:
-  - 'packages/*'
+  - .
 allowBuilds:
   esbuild: true
